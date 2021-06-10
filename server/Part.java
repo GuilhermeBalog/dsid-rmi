@@ -1,3 +1,5 @@
+package server;
+
 import java.util.List;
 import javafx.util.Pair;
 import java.io.Serializable;

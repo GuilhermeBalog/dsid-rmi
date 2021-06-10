@@ -1,3 +1,5 @@
+package client;
+
 public interface IClient {
   /**
    * Faz o cliente se conectar a outro servidor
