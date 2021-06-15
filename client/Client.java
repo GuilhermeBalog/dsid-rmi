@@ -13,23 +13,30 @@ import java.util.List;
 import java.util.Optional;
 
 public class Client implements IClient {
-    // TODO: Colocar o nome do server como atributo do server
     private PartRepository server;
+    private String serverName;
     private Part currentPart;
     private final List<AbstractMap.SimpleEntry<Part, Integer>> subPartsToBeAdded = new ArrayList<>();
 
     @Override
     public void bind(String serverName) throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry();
+        System.out.println("Procurando o servidor " + serverName);
+        Registry registry = LocateRegistry.getRegistry(15000);
 
+        this.serverName = serverName;
+
+        System.out.println("Conectando ao servidor " + serverName);
         this.server = (PartRepository) registry.lookup(serverName);
     }
 
     @Override
     public void listp() throws RemoteException {
         List<Part> parts = server.findAll();
+
+        System.out.println("Listando " + parts.size() + " peças...");
+
         parts.forEach((part) -> {
-            System.out.println(part.toString());
+            System.out.println(part.getCode() + ". " + part.getNome() + " - " + part.getDescription());
         });
     }
 
@@ -49,6 +56,7 @@ public class Client implements IClient {
     @Override
     public void clearlist() {
         this.subPartsToBeAdded.clear();
+        System.out.println("Lista de sub peças esvaziada");
     }
 
     @Override
@@ -57,13 +65,12 @@ public class Client implements IClient {
     }
 
     @Override
-    public void addp() throws RemoteException {
-        // TODO: Implementar classe Part
-        // TODO: Receber por parametros os dados da part
-        Part newPart = new Part();
+    public void addp(String nome, String description) throws RemoteException {
+        Part newPart = new Part(nome, description, subPartsToBeAdded, serverName);
         newPart.setSubParts(this.subPartsToBeAdded);
-        server.add(newPart);
-    }
+        Part part = server.add(newPart);
 
-    // TODO: Garantir que nao existe um método quitServer ou algo assim
+        System.out.println("Parte criada:");
+        System.out.println(part.toString());
+    }
 }

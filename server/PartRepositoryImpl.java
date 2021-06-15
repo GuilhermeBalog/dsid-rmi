@@ -13,7 +13,10 @@ public class PartRepositoryImpl implements PartRepository {
 
 	@Override
 	public Part add(Part part) {
+		part.setCode(parts.size() + 1);
+
 		parts.add(part);
+
 		return part;
 	}
 

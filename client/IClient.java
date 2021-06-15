@@ -43,5 +43,5 @@ public interface IClient {
    * Adiciona uma peça ao repositório corrente utilizando a lista de sub-peças
    * corrente como conjunto de subcomponentes
    */
-  void addp() throws RemoteException;
+  void addp(String nome, String description) throws RemoteException;
 }
