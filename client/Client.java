@@ -37,7 +37,10 @@ public class Client implements IClient{
     public void getp(int code) throws RemoteException {
         Optional<Part> optPart = server.findByCode(code);
 
-        optPart.ifPresent(partValue -> this.currentPart = partValue);
+        optPart.ifPresentOrElse(
+            partValue -> this.currentPart = partValue,
+            () -> System.out.println("Nenhuma parte encontrada com o código " + code)
+        );
     }
 
     @Override
