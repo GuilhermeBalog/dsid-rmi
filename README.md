@@ -9,6 +9,7 @@ Este trabalho foi desenvolvido por:
 - [Ana Beatriz](https://github.com/anabcuelbas)
 - [Gabriel](https://github.com/gmichelassi)
 - [Guilherme Balog](https://github.com/GuilhermeBalog)
+- [Lucas Siqueira](lucas2.siqueira@usp.br)
 
 Como trabalho proposto pelo professor [Daniel Cordeiro](http://www.each.usp.br/dc/).
 
