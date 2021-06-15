@@ -1,25 +1,32 @@
 package client;
 
+import server.Part;
+
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.Optional;
+
 public interface IClient {
   /**
    * Faz o cliente se conectar a outro servidor
    * e muda o repositório corrente.
    * (Exibir o número de peças)
    */
-  void bind(String serverName);
+  void bind(String serverName) throws RemoteException, NotBoundException;
 
   /**
    * Lista as peças do repositório corrente
-   * (Exibir p número de peças)
+   * (Exibir o número de peças)
    */
-  void listp();
+  void listp() throws RemoteException;
 
   /**
    * Busca uma peça por código
    * no repositório corrente
    * e se encontrada, se torna a peça corrente
+   * @return
    */
-  Part getp(int code);
+  void getp(int code) throws RemoteException;
 
   /**
    * Mostra atributos da peça corrente
@@ -37,17 +44,12 @@ public interface IClient {
    * Adiciona n unidades da peça corrente
    * na lista de sub-peças
    */
-  void addsubpart();
+  void addsubpart(Integer qtd);
 
   /**
    * Adiciona uma peça ao repositório corrente
    * utilizando a lista de sub-peças corrente
    * como conjunto de subcomponentes
    */
-  void addp();
-
-  /**
-   * Encerra a execução do cliente
-   */
-  void quit();
+  void addp() throws RemoteException;
 }
