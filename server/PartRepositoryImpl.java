@@ -3,28 +3,24 @@ package server;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.rmi.registry.Registry;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 public class PartRepositoryImpl implements PartRepository {
 	private final List<Part> parts;
 
-	public PartRepositoryImpl(){
+	public PartRepositoryImpl() {
 		parts = new ArrayList<>();
 	}
 
 	@Override
-	public Part add(Part part){
+	public Part add(Part part) {
 		parts.add(part);
 		return part;
 	}
 
 	@Override
 	public Optional<Part> findByCode(int code) {
-		for(Part part : parts) {
-			if(part.getCode() == code){
+		for (Part part : parts) {
+			if (part.getCode() == code) {
 				return Optional.of(part);
 			}
 		}
@@ -33,12 +29,12 @@ public class PartRepositoryImpl implements PartRepository {
 	}
 
 	@Override
-	public List<Part> findAll(){
+	public List<Part> findAll() {
 		return parts;
 	}
 
 	@Override
-	public List<Part> findAll(PartRepository repository){
+	public List<Part> findAll(PartRepository repository) {
 		return this.findAll();
 	}
 }

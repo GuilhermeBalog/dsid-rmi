@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Client implements IClient{
+public class Client implements IClient {
     // TODO: Colocar o nome do server como atributo do server
     private PartRepository server;
     private Part currentPart;
@@ -37,24 +37,22 @@ public class Client implements IClient{
     public void getp(int code) throws RemoteException {
         Optional<Part> optPart = server.findByCode(code);
 
-        optPart.ifPresentOrElse(
-            partValue -> this.currentPart = partValue,
-            () -> System.out.println("Nenhuma parte encontrada com o código " + code)
-        );
+        optPart.ifPresentOrElse(partValue -> this.currentPart = partValue,
+                () -> System.out.println("Nenhuma parte encontrada com o código " + code));
     }
 
     @Override
-    public void showp(){
+    public void showp() {
         System.out.println(currentPart.toString());
     }
 
     @Override
-    public void clearlist(){
+    public void clearlist() {
         this.subPartsToBeAdded.clear();
     }
 
     @Override
-    public void addsubpart(Integer qtd){
+    public void addsubpart(Integer qtd) {
         this.subPartsToBeAdded.add(new AbstractMap.SimpleEntry<>(currentPart, qtd));
     }
 
@@ -67,5 +65,5 @@ public class Client implements IClient{
         server.add(newPart);
     }
 
-    //TODO: Garantir que nao existe um método quitServer ou algo assim
+    // TODO: Garantir que nao existe um método quitServer ou algo assim
 }
