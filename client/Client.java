@@ -18,15 +18,17 @@ public class Client implements IClient {
     private Part currentPart;
     private final List<AbstractMap.SimpleEntry<Part, Integer>> subPartsToBeAdded = new ArrayList<>();
 
+    public String getSummary(){
+        return "[servidor: " + (serverName != null ? serverName : "nenhum")
+                + "; peça atual: " + (currentPart != null? currentPart.getNome() : "nenhum")
+                + "; número de sub-peças na lista: " + subPartsToBeAdded.size() + "]";
+    }
+
     @Override
     public void bind(String serverName) throws RemoteException, NotBoundException {
-        System.out.println("Procurando o servidor " + serverName);
         Registry registry = LocateRegistry.getRegistry(15000);
-
-        this.serverName = serverName;
-
-        System.out.println("Conectando ao servidor " + serverName);
         this.server = (PartRepository) registry.lookup(serverName);
+        this.serverName = serverName;
     }
 
     @Override
@@ -35,9 +37,7 @@ public class Client implements IClient {
 
         System.out.println("Listando " + parts.size() + " peças...");
 
-        parts.forEach((part) -> {
-            System.out.println(part.getCode() + ". " + part.getNome() + " - " + part.getDescription());
-        });
+        parts.forEach((part) -> System.out.println(part.getCode() + ". " + part.getNome() + " - " + part.getDescription()));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Client implements IClient {
         newPart.setSubParts(this.subPartsToBeAdded);
         Part part = server.add(newPart);
 
-        System.out.println("Parte criada:");
+        System.out.println("Peça criada:");
         System.out.println(part.toString());
     }
 }

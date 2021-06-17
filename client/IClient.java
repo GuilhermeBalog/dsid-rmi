@@ -18,8 +18,6 @@ public interface IClient {
   /**
    * Busca uma peça por código no repositório corrente e se encontrada, se torna a
    * peça corrente
-   *
-   * @return
    */
   void getp(int code) throws RemoteException;
 
