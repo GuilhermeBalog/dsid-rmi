@@ -24,6 +24,18 @@ public class Client implements IClient {
                 + "; número de sub-peças na lista: " + subPartsToBeAdded.size() + "]";
     }
 
+    public void checkServer() throws ServerNotSelectedException{
+        if(server == null || serverName == null){
+            throw new ServerNotSelectedException();
+        }
+    }
+
+    public void checkCurrentPart() throws PartNotSelectedException{
+        if(currentPart == null){
+            throw new PartNotSelectedException();
+        }
+    }
+
     @Override
     public void bind(String serverName) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(15000);
@@ -32,7 +44,8 @@ public class Client implements IClient {
     }
 
     @Override
-    public void listp() throws RemoteException {
+    public void listp() throws RemoteException, ServerNotSelectedException {
+        checkServer();
         List<Part> parts = server.findAll();
 
         System.out.println("Listando " + parts.size() + " peças...");
@@ -41,15 +54,21 @@ public class Client implements IClient {
     }
 
     @Override
-    public void getp(int code) throws RemoteException {
-        Optional<Part> optPart = server.findByCode(code);
-
-        optPart.ifPresentOrElse(partValue -> this.currentPart = partValue,
-                () -> System.out.println("Nenhuma parte encontrada com o código " + code));
+    public void getp(int code) throws RemoteException, ServerNotSelectedException {
+        checkServer();
+        Part part = server.findByCode(code);
+        if(part != null){
+            this.currentPart = part;
+            System.out.println("Peça encontrada!");
+            System.out.println(this.currentPart);
+        } else {
+            System.out.println("Nenhuma peça encontrada com o código " + code);
+        }
     }
 
     @Override
-    public void showp() {
+    public void showp() throws PartNotSelectedException {
+        checkCurrentPart();
         System.out.println(currentPart.toString());
     }
 
@@ -60,12 +79,15 @@ public class Client implements IClient {
     }
 
     @Override
-    public void addsubpart(Integer qtd) {
+    public void addsubpart(Integer qtd) throws PartNotSelectedException {
+        checkCurrentPart();
         this.subPartsToBeAdded.add(new AbstractMap.SimpleEntry<>(currentPart, qtd));
     }
 
     @Override
-    public void addp(String nome, String description) throws RemoteException {
+    public void addp(String nome, String description) throws RemoteException, ServerNotSelectedException {
+        checkServer();
+
         Part newPart = new Part(nome, description, subPartsToBeAdded, serverName);
         newPart.setSubParts(this.subPartsToBeAdded);
         Part part = server.add(newPart);

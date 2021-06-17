@@ -21,14 +21,13 @@ public class PartRepositoryImpl implements PartRepository {
 	}
 
 	@Override
-	public Optional<Part> findByCode(int code) {
+	public Part findByCode(int code) {
 		for (Part part : parts) {
 			if (part.getCode() == code) {
-				return Optional.of(part);
+				return part;
 			}
 		}
-
-		return Optional.empty();
+		return null;
 	}
 
 	@Override

@@ -29,13 +29,14 @@ public class PartClient {
         },
         LISTP("Listar as peças do servidor conectado"){
             @Override
-            public void run() throws RemoteException{
+            public void run() throws RemoteException, ServerNotSelectedException {
                 client.listp();
             }
         },
         GETP("Procurar uma peça por código"){
             @Override
-            public void run() throws RemoteException {
+            public void run() throws RemoteException, ServerNotSelectedException {
+                client.checkServer();
                 try {
                     System.out.println("Digite o código da Part que deseja buscar");
                     System.out.print("> ");
@@ -48,7 +49,7 @@ public class PartClient {
         },
         SHOWP("Mostrar os detalhes da peça selecionada"){
             @Override
-            public void run() {
+            public void run() throws PartNotSelectedException {
                 client.showp();
             }
         },
@@ -60,7 +61,8 @@ public class PartClient {
         },
         ADDSUBPART("Adicionar n unidades da peça selecionada na lista de sub peças"){
             @Override
-            public void run() {
+            public void run() throws PartNotSelectedException {
+                client.checkCurrentPart();
                 try {
                     System.out.println("Digite a quantidade que deseja adicionar");
                     System.out.print("> ");
@@ -73,7 +75,9 @@ public class PartClient {
         },
         ADDP("Adicionar uma nova peça ao servidor conectado"){
             @Override
-            public void run() throws RemoteException{
+            public void run() throws RemoteException, ServerNotSelectedException {
+                client.checkServer();
+
                 System.out.println("Digite o nome da peça a ser adicionada");
                 System.out.print("> ");
                 String name = sc.nextLine();
@@ -133,11 +137,20 @@ public class PartClient {
             return description;
         }
 
-        public abstract void run() throws RemoteException;
+        public abstract void run() throws RemoteException, ServerNotSelectedException, PartNotSelectedException;
+    }
+
+    private static void printWelcomeMessage(){
+        String message = " Olá, este é o Sistema de Peças Distribuídas! ";
+
+        System.out.println("\n" + "=".repeat(message.length()));
+        System.out.println(message);
+        System.out.println("=".repeat(message.length()));
     }
 
     public static void main(String[] args) {
-        System.out.println("Olá, este é o Sistema de Peças Distribuídas!\n");
+        printWelcomeMessage();
+
         running = true;
 
         while (running) {
@@ -148,14 +161,16 @@ public class PartClient {
                 System.out.print("> ");
 
                 String inputCommand = sc.nextLine().strip().toUpperCase(Locale.ROOT);
-                try{
                     Command foundedCommand = Command.valueOf(inputCommand);
                     foundedCommand.run();
-                } catch (IllegalArgumentException e){
-                    System.out.println("Comando invalido, tente novamente!");
-                }
             } catch (RemoteException e) {
                 System.out.println("Erro ao conectar ao servidor");
+            } catch (IllegalArgumentException e){
+                System.out.println("Comando invalido, tente novamente!");
+            } catch (ServerNotSelectedException e) {
+                System.out.println("Se conecte a um servidor primeiro com o comando 'bind'!");
+            } catch (PartNotSelectedException e) {
+                System.out.println("Selecione uma peça primeiro com o comando 'getp'!");
             }
         }
     }
