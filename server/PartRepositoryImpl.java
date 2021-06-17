@@ -35,9 +35,4 @@ public class PartRepositoryImpl implements PartRepository {
 	public List<Part> findAll() {
 		return parts;
 	}
-
-	@Override
-	public List<Part> findAll(PartRepository repository) {
-		return this.findAll();
-	}
 }

@@ -10,7 +10,5 @@ public interface PartRepository extends Remote {
 
 	Optional<Part> findByCode(int code) throws RemoteException;
 
-	List<Part> findAll(PartRepository repository) throws RemoteException;
-
 	List<Part> findAll() throws RemoteException;
 }
