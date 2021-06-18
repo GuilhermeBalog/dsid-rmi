@@ -18,38 +18,57 @@ public class Client implements IClient {
     private Part currentPart;
     private final List<AbstractMap.SimpleEntry<Part, Integer>> subPartsToBeAdded = new ArrayList<>();
 
-    @Override
-    public void bind(String serverName) throws RemoteException, NotBoundException {
-        System.out.println("Procurando o servidor " + serverName);
-        Registry registry = LocateRegistry.getRegistry(15000);
+    public String getSummary(){
+        return "[servidor: " + (serverName != null ? serverName : "nenhum")
+                + "; peça atual: " + (currentPart != null? currentPart.getNome() : "nenhum")
+                + "; número de sub-peças na lista: " + subPartsToBeAdded.size() + "]";
+    }
 
-        this.serverName = serverName;
+    public void checkServer() throws ServerNotSelectedException{
+        if(server == null || serverName == null){
+            throw new ServerNotSelectedException();
+        }
+    }
 
-        System.out.println("Conectando ao servidor " + serverName);
-        this.server = (PartRepository) registry.lookup(serverName);
+    public void checkCurrentPart() throws PartNotSelectedException{
+        if(currentPart == null){
+            throw new PartNotSelectedException();
+        }
     }
 
     @Override
-    public void listp() throws RemoteException {
+    public void bind(String serverName) throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(15000);
+        this.server = (PartRepository) registry.lookup(serverName);
+        this.serverName = serverName;
+    }
+
+    @Override
+    public void listp() throws RemoteException, ServerNotSelectedException {
+        checkServer();
         List<Part> parts = server.findAll();
 
         System.out.println("Listando " + parts.size() + " peças...");
 
-        parts.forEach((part) -> {
-            System.out.println(part.getCode() + ". " + part.getNome() + " - " + part.getDescription());
-        });
+        parts.forEach((part) -> System.out.println(part.getCode() + ". " + part.getNome() + " - " + part.getDescription()));
     }
 
     @Override
-    public void getp(int code) throws RemoteException {
-        Optional<Part> optPart = server.findByCode(code);
-
-        optPart.ifPresentOrElse(partValue -> this.currentPart = partValue,
-                () -> System.out.println("Nenhuma parte encontrada com o código " + code));
+    public void getp(int code) throws RemoteException, ServerNotSelectedException {
+        checkServer();
+        Part part = server.findByCode(code);
+        if(part != null){
+            this.currentPart = part;
+            System.out.println("Peça encontrada!");
+            System.out.println(this.currentPart);
+        } else {
+            System.out.println("Nenhuma peça encontrada com o código " + code);
+        }
     }
 
     @Override
-    public void showp() {
+    public void showp() throws PartNotSelectedException {
+        checkCurrentPart();
         System.out.println(currentPart.toString());
     }
 
@@ -60,17 +79,20 @@ public class Client implements IClient {
     }
 
     @Override
-    public void addsubpart(Integer qtd) {
+    public void addsubpart(Integer qtd) throws PartNotSelectedException {
+        checkCurrentPart();
         this.subPartsToBeAdded.add(new AbstractMap.SimpleEntry<>(currentPart, qtd));
     }
 
     @Override
-    public void addp(String nome, String description) throws RemoteException {
+    public void addp(String nome, String description) throws RemoteException, ServerNotSelectedException {
+        checkServer();
+
         Part newPart = new Part(nome, description, subPartsToBeAdded, serverName);
         newPart.setSubParts(this.subPartsToBeAdded);
         Part part = server.add(newPart);
 
-        System.out.println("Parte criada:");
+        System.out.println("Peça criada:");
         System.out.println(part.toString());
     }
 }

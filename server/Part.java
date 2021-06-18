@@ -70,10 +70,10 @@ public class Part implements Serializable {
 					.append(" quantidade: ").append(line.getValue());
 		}
 
-		return  "Código " + code +
-				"\nNome: " + nome +
-				"\nDescrição: " + description +
-				"\nServidor: " + serverName +
-				"\nSubParts: " + subPartsString;
+		return  "- Código " + code +
+				"\n- Nome: " + nome +
+				"\n- Descrição: " + description +
+				"\n- Servidor: " + serverName +
+				"\n- SubParts: [" + subPartsString + "]";
 	}
 }
