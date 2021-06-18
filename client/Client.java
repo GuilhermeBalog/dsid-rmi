@@ -13,14 +13,14 @@ import java.util.List;
 
 import static server.PartServer.PORT;
 
-public class Client implements IClient {
+public class Client {
     private PartRepository server;
     private String serverName;
     private Part currentPart;
     private final List<AbstractMap.SimpleEntry<Part, Integer>> subPartsToBeAdded = new ArrayList<>();
 
     public String getSummary(){
-        return "[servidor: " + (serverName != null ? serverName : "nenhum")
+        return "[repositório: " + (serverName != null ? serverName : "nenhum")
                 + "; peça atual: " + (currentPart != null? currentPart.getNome() : "nenhum")
                 + "; número de sub-peças na lista: " + subPartsToBeAdded.size() + "]";
     }
@@ -37,7 +37,6 @@ public class Client implements IClient {
         }
     }
 
-    @Override
     public void bind(String serverName) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(PORT);
 
@@ -45,7 +44,6 @@ public class Client implements IClient {
         this.serverName = serverName;
     }
 
-    @Override
     public void listp() throws RemoteException, ServerNotSelectedException {
         checkServer();
         List<Part> parts = server.findAll();
@@ -55,7 +53,6 @@ public class Client implements IClient {
         parts.forEach((part) -> System.out.println(part.getCode() + ". " + part.getNome() + " - " + part.getDescription()));
     }
 
-    @Override
     public void getp(int code) throws RemoteException, ServerNotSelectedException {
         checkServer();
         Part part = server.findByCode(code);
@@ -68,25 +65,21 @@ public class Client implements IClient {
         }
     }
 
-    @Override
     public void showp() throws PartNotSelectedException {
         checkCurrentPart();
         System.out.println(currentPart.toString());
     }
 
-    @Override
     public void clearlist() {
         this.subPartsToBeAdded.clear();
         System.out.println("Lista de sub peças esvaziada");
     }
 
-    @Override
     public void addsubpart(Integer qtd) throws PartNotSelectedException {
         checkCurrentPart();
         this.subPartsToBeAdded.add(new AbstractMap.SimpleEntry<>(currentPart, qtd));
     }
 
-    @Override
     public void addp(String nome, String description) throws RemoteException, ServerNotSelectedException {
         checkServer();
 
@@ -98,7 +91,6 @@ public class Client implements IClient {
         System.out.println(part.toString());
     }
 
-    @Override
     public void listrepo() throws RemoteException {
         String[] repositories = LocateRegistry.getRegistry(PORT).list();
 
@@ -106,4 +98,19 @@ public class Client implements IClient {
             System.out.println(repository);
         }
     }
+
+    public void listsub() {
+        StringBuilder subPartsString = new StringBuilder();
+
+        for (AbstractMap.SimpleEntry<Part, Integer> line : subPartsToBeAdded) {
+			Part part = line.getKey();
+			subPartsString.append("\nCódigo: ").append(part.getCode())
+					.append(", nome: ").append(part.getNome())
+					.append(", repositório: ").append(part.getServerName())
+					.append(", quantidade: ").append(line.getValue());
+		}
+
+        System.out.println(subPartsString);
+    }
+
 }

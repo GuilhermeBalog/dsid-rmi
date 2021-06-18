@@ -66,14 +66,14 @@ public class Part implements Serializable {
 			Part part = line.getKey();
 			subPartsString.append("\nCódigo: ").append(part.getCode())
 					.append(", nome: ").append(part.getNome())
-					.append(", servidor: ").append(part.getServerName())
-					.append(" quantidade: ").append(line.getValue());
+					.append(", repositório: ").append(part.getServerName())
+					.append(", quantidade: ").append(line.getValue());
 		}
 
 		return  "- Código " + code +
 				"\n- Nome: " + nome +
 				"\n- Descrição: " + description +
-				"\n- Servidor: " + serverName +
+				"\n- Repositório: " + serverName +
 				"\n- SubParts: [" + subPartsString + "]";
 	}
 }

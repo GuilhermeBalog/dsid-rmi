@@ -1,5 +1,6 @@
 package server;
 
+import java.rmi.AlreadyBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -24,14 +25,20 @@ public class PartServer {
         try {
             PartRepository server = new PartRepositoryImpl();
             PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(server, 0);
+
             Registry registry = LocateRegistry.getRegistry(PORT);
             if (registry == null) {
                 registry = LocateRegistry.createRegistry(PORT);
             }
 
-            registry.bind(serverName, stub);
-
-            System.out.println("Servidor '" + serverName + "' pronto!");
+            try {
+                registry.bind(serverName, stub);
+                System.out.println("Servidor '" + serverName + "' pronto!");
+            }
+            catch (AlreadyBoundException e) {
+                System.out.println("Já existe um servidor com este nome. Por favor escolha outro.");
+                System.exit(0);
+            }
         } catch (Exception e) {
             System.err.println("Exceção no servidor: " + e);
             e.printStackTrace();
