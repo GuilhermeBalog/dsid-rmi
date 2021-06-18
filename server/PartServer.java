@@ -6,6 +6,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 public class PartServer {
+    public static final int PORT = 15000;
+
     public static void main(String[] args){
         String serverName;
 
@@ -22,8 +24,11 @@ public class PartServer {
         try {
             PartRepository server = new PartRepositoryImpl();
             PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(server, 0);
+            Registry registry = LocateRegistry.getRegistry(PORT);
+            if (registry == null) {
+                registry = LocateRegistry.createRegistry(PORT);
+            }
 
-            Registry registry = LocateRegistry.createRegistry(15000);
             registry.bind(serverName, stub);
 
             System.out.println("Servidor '" + serverName + "' pronto!");

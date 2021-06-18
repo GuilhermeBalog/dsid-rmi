@@ -1,7 +1,9 @@
 package client;
 
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -87,6 +89,12 @@ public class PartClient {
                 String description = sc.nextLine();
 
                 client.addp(name, description);
+            }
+        },
+        LISTREPO("Lista repositórios disponíveis"){
+            @Override
+            public void run() throws RemoteException {
+                client.listrepo();
             }
         },
         QUIT("Encerra o programa"){

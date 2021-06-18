@@ -10,7 +10,8 @@ import java.rmi.registry.Registry;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import static server.PartServer.PORT;
 
 public class Client implements IClient {
     private PartRepository server;
@@ -38,7 +39,8 @@ public class Client implements IClient {
 
     @Override
     public void bind(String serverName) throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(15000);
+        Registry registry = LocateRegistry.getRegistry(PORT);
+
         this.server = (PartRepository) registry.lookup(serverName);
         this.serverName = serverName;
     }
@@ -94,5 +96,14 @@ public class Client implements IClient {
 
         System.out.println("Peça criada:");
         System.out.println(part.toString());
+    }
+
+    @Override
+    public void listrepo() throws RemoteException {
+        String[] repositories = LocateRegistry.getRegistry(PORT).list();
+
+        for (String repository: repositories  ) {
+            System.out.println(repository);
+        }
     }
 }

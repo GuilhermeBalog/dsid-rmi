@@ -42,4 +42,6 @@ public interface IClient {
    * corrente como conjunto de subcomponentes
    */
   void addp(String nome, String description) throws RemoteException, ServerNotSelectedException;
+
+  void listrepo() throws RemoteException;
 }
