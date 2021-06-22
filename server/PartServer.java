@@ -27,7 +27,12 @@ public class PartServer {
             PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(server, 0);
 
             Registry registry = LocateRegistry.getRegistry(PORT);
-            if (registry == null) {
+
+            try {
+                registry.bind("#donotusethisnameTHANKS", stub);
+                registry.unbind("#donotusethisnameTHANKS");
+            }
+            catch (Exception e) {
                 registry = LocateRegistry.createRegistry(PORT);
             }
 
