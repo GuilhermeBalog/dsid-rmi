@@ -13,39 +13,39 @@ public class PartClient {
     private static boolean running = false;
 
     private enum Command {
-        BIND("Conectar a um repositório"){
+        BIND("Conectar a um repositorio"){
             @Override
             public void run() throws RemoteException{
-                System.out.println("Digite o nome do repositório que deseja se conectar");
+                System.out.println("Digite o nome do repositorio que deseja se conectar");
                 System.out.print("> ");
                 String serverName = sc.nextLine();
                 try{
-                    System.out.println("Procurando o repositório '" + serverName + "'...");
+                    System.out.println("Procurando o repositorio '" + serverName + "'...");
                     client.bind(serverName);
-                    System.out.println("Repositório '" + serverName + "' conectado!");
+                    System.out.println("Repositorio '" + serverName + "' conectado!");
 
                 } catch (NotBoundException e){
-                    System.out.println("Nenhum repositório com o nome '" + serverName + "' encontrado");
+                    System.out.println("Nenhum repositorio com o nome '" + serverName + "' encontrado");
                 }
             }
         },
-        LISTP("Listar as peças do repositório conectado"){
+        LISTP("Listar as peças do repositorio conectado"){
             @Override
             public void run() throws RemoteException, ServerNotSelectedException {
                 client.listp();
             }
         },
-        GETP("Procurar uma peça por código"){
+        GETP("Procurar uma peça por codigo"){
             @Override
             public void run() throws RemoteException, ServerNotSelectedException {
                 client.checkServer();
                 try {
-                    System.out.println("Digite o código da Part que deseja buscar");
+                    System.out.println("Digite o codigo da Part que deseja buscar");
                     System.out.print("> ");
                     int code = Integer.parseInt(sc.nextLine());
                     client.getp(code);
                 } catch (NumberFormatException e) {
-                    System.out.println("Código invalido digitado: não é um número.");
+                    System.out.println("Codigo invalido digitado: não é um numero.");
                 }
             }
         },
@@ -55,13 +55,13 @@ public class PartClient {
                 client.showp();
             }
         },
-        CLEARLIST("Limpa a lista de sub peças"){
+        CLEARLIST("Limpa a lista de sub pecas"){
             @Override
             public void run() {
                 client.clearlist();
             }
         },
-        ADDSUBPART("Adicionar n unidades da peça selecionada na lista de sub peças"){
+        ADDSUBPART("Adicionar n unidades da peca selecionada na lista de sub pecas"){
             @Override
             public void run() throws PartNotSelectedException {
                 client.checkCurrentPart();
@@ -71,33 +71,33 @@ public class PartClient {
                     int qtd = Integer.parseInt(sc.nextLine());
                     client.addsubpart(qtd);
                 } catch (NumberFormatException e) {
-                    System.out.println("Quantidade invalida digitada: não é um número.");
+                    System.out.println("Quantidade invalida digitada: nao eh um numero.");
                 }
             }
         },
-        ADDP("Adicionar uma nova peça ao repositório conectado"){
+        ADDP("Adicionar uma nova peca ao repositorio conectado"){
             @Override
             public void run() throws RemoteException, ServerNotSelectedException {
                 client.checkServer();
 
-                System.out.println("Digite o nome da peça a ser adicionada");
+                System.out.println("Digite o nome da peca a ser adicionada");
                 System.out.print("> ");
                 String name = sc.nextLine();
 
-                System.out.println("Digite a descrição da peça a ser adicionada");
+                System.out.println("Digite a descricao da peca a ser adicionada");
                 System.out.print("> ");
                 String description = sc.nextLine();
 
                 client.addp(name, description);
             }
         },
-        LISTREPO("Lista repositórios disponíveis"){
+        LISTREPO("Lista repositorios disponiveis"){
             @Override
             public void run() throws RemoteException {
                 client.listrepo();
             }
         },
-        LISTSUB("Lista subpeças a serem adicionadas"){
+        LISTSUB("Lista subpecas a serem adicionadas"){
             @Override
             public void run() {
                 client.listsub();
@@ -109,7 +109,7 @@ public class PartClient {
                 running = false;
                 sc.close();
                 System.out.println("Encerrando cliente...");
-                System.out.println("Obrigado por usar o Sistema de Peças Distribuídas!");
+                System.out.println("Obrigado por usar o Sistema de Pecas Distribuidas!");
             }
         },
         HELP("Exibe essa mensagem"){
@@ -155,7 +155,7 @@ public class PartClient {
     }
 
     private static void printWelcomeMessage(){
-        String message = " Olá, este é o Sistema de Peças Distribuídas! ";
+        String message = " Ola, este eh o Sistema de Pecas Distribuidas! ";
 
         System.out.println("\n" + "=".repeat(message.length()));
         System.out.println(message);
@@ -170,7 +170,7 @@ public class PartClient {
         while (running) {
             try {
                 System.out.println("\nDigite o comando que deseja executar");
-                System.out.println("Digite 'help' para visualizar os comandos disponíveis");
+                System.out.println("Digite 'help' para visualizar os comandos disponiveis");
                 System.out.println(client.getSummary());
                 System.out.print("> ");
 
@@ -178,11 +178,11 @@ public class PartClient {
                     Command foundedCommand = Command.valueOf(inputCommand);
                     foundedCommand.run();
             } catch (RemoteException e) {
-                System.out.println("Erro ao conectar ao repositório");
+                System.out.println("Erro ao conectar ao repositorio");
             } catch (IllegalArgumentException e){
-                System.out.println("Comando inválido, tente novamente!");
+                System.out.println("Comando invalido, tente novamente!");
             } catch (ServerNotSelectedException e) {
-                System.out.println("Se conecte a um repositório primeiro com o comando 'bind'!");
+                System.out.println("Se conecte a um repositorio primeiro com o comando 'bind'!");
             } catch (PartNotSelectedException e) {
                 System.out.println("Selecione uma peça primeiro com o comando 'getp'!");
             }

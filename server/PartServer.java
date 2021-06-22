@@ -15,7 +15,7 @@ public class PartServer {
         if(args.length >= 1){
             serverName = args[0];
         } else {
-            System.out.println("Forneça um nome para o servidor");
+            System.out.println("Forneca um nome para o servidor");
             System.out.print("> ");
             Scanner sc = new Scanner(System.in);
             serverName = sc.nextLine().strip();
@@ -41,11 +41,11 @@ public class PartServer {
                 System.out.println("Servidor '" + serverName + "' pronto!");
             }
             catch (AlreadyBoundException e) {
-                System.out.println("Já existe um servidor com este nome. Por favor escolha outro.");
+                System.out.println("Ja existe um servidor com este nome. Por favor escolha outro.");
                 System.exit(0);
             }
         } catch (Exception e) {
-            System.err.println("Exceção no servidor: " + e);
+            System.err.println("Excecao no servidor: " + e);
             e.printStackTrace();
         }
     }

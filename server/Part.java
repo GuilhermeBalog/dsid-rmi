@@ -64,16 +64,16 @@ public class Part implements Serializable {
 
 		for (AbstractMap.SimpleEntry<Part, Integer> line : subParts) {
 			Part part = line.getKey();
-			subPartsString.append("\nCódigo: ").append(part.getCode())
+			subPartsString.append("\nCodigo: ").append(part.getCode())
 					.append(", nome: ").append(part.getNome())
-					.append(", repositório: ").append(part.getServerName())
+					.append(", repositorio: ").append(part.getServerName())
 					.append(", quantidade: ").append(line.getValue());
 		}
 
-		return  "- Código " + code +
+		return  "- Codigo " + code +
 				"\n- Nome: " + nome +
-				"\n- Descrição: " + description +
-				"\n- Repositório: " + serverName +
+				"\n- Descricao: " + description +
+				"\n- Repositorio: " + serverName +
 				"\n- SubParts: [" + subPartsString + "]";
 	}
 }

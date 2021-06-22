@@ -20,9 +20,9 @@ public class Client {
     private final List<AbstractMap.SimpleEntry<Part, Integer>> subPartsToBeAdded = new ArrayList<>();
 
     public String getSummary(){
-        return "[repositório: " + (serverName != null ? serverName : "nenhum")
-                + "; peça atual: " + (currentPart != null? currentPart.getNome() : "nenhum")
-                + "; número de sub-peças na lista: " + subPartsToBeAdded.size() + "]";
+        return "[repositorio: " + (serverName != null ? serverName : "nenhum")
+                + "; peca atual: " + (currentPart != null? currentPart.getNome() : "nenhum")
+                + "; numero de sub-pecas na lista: " + subPartsToBeAdded.size() + "]";
     }
 
     public void checkServer() throws ServerNotSelectedException{
@@ -48,7 +48,7 @@ public class Client {
         checkServer();
         List<Part> parts = server.findAll();
 
-        System.out.println("Listando " + parts.size() + " peças...");
+        System.out.println("Listando " + parts.size() + " pecas...");
 
         parts.forEach((part) -> System.out.println(part.getCode() + ". " + part.getNome() + " - " + part.getDescription()));
     }
@@ -58,10 +58,10 @@ public class Client {
         Part part = server.findByCode(code);
         if(part != null){
             this.currentPart = part;
-            System.out.println("Peça encontrada!");
+            System.out.println("Peca encontrada!");
             System.out.println(this.currentPart);
         } else {
-            System.out.println("Nenhuma peça encontrada com o código " + code);
+            System.out.println("Nenhuma peca encontrada com o codigo " + code);
         }
     }
 
@@ -72,7 +72,7 @@ public class Client {
 
     public void clearlist() {
         this.subPartsToBeAdded.clear();
-        System.out.println("Lista de sub peças esvaziada");
+        System.out.println("Lista de sub pecas esvaziada");
     }
 
     public void addsubpart(Integer qtd) throws PartNotSelectedException {
@@ -87,7 +87,7 @@ public class Client {
         newPart.setSubParts(this.subPartsToBeAdded);
         Part part = server.add(newPart);
 
-        System.out.println("Peça criada:");
+        System.out.println("Peca criada:");
         System.out.println(part.toString());
     }
 
@@ -104,9 +104,9 @@ public class Client {
 
         for (AbstractMap.SimpleEntry<Part, Integer> line : subPartsToBeAdded) {
 			Part part = line.getKey();
-			subPartsString.append("\nCódigo: ").append(part.getCode())
+			subPartsString.append("\nCodigo: ").append(part.getCode())
 					.append(", nome: ").append(part.getNome())
-					.append(", repositório: ").append(part.getServerName())
+					.append(", repositorio: ").append(part.getServerName())
 					.append(", quantidade: ").append(line.getValue());
 		}
 
