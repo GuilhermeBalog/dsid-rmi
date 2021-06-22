@@ -29,13 +29,13 @@ public class PartClient {
                 }
             }
         },
-        LISTP("Listar as peças do repositorio conectado"){
+        LISTP("Listar as pecas do repositorio conectado"){
             @Override
             public void run() throws RemoteException, ServerNotSelectedException {
                 client.listp();
             }
         },
-        GETP("Procurar uma peça por codigo"){
+        GETP("Procurar uma peca por codigo"){
             @Override
             public void run() throws RemoteException, ServerNotSelectedException {
                 client.checkServer();
@@ -49,7 +49,7 @@ public class PartClient {
                 }
             }
         },
-        SHOWP("Mostrar os detalhes da peça selecionada"){
+        SHOWP("Mostrar os detalhes da peca selecionada"){
             @Override
             public void run() throws PartNotSelectedException {
                 client.showp();
